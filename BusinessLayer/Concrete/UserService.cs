@@ -25,7 +25,7 @@ namespace BusinessLayer.Concrete {
             await userRepository.AddAsync(value);
         }
 
-        public async Task DeleteUser(int userId) {
+        public async Task DeleteUserById(int userId) {
             await userRepository.DeleteAsync(u => u.Id == userId);
         }
 

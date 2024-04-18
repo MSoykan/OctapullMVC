@@ -1,5 +1,9 @@
-﻿using BusinessLayer.Abstract;
+﻿using AutoMapper;
+using BusinessLayer.Abstract;
+using DataAccessLayer.Abstract;
 using EntityLayer.Concrete;
+using EntityLayer.Dtos.MeetingDtos;
+using EntityLayer.Dtos.MeetingDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +12,36 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.Concrete {
     public class MeetingService : IMeetingService {
-        public Task AddMeeting(Meeting meeting) {
-            throw new NotImplementedException();
+
+        private readonly IMeetingRepository meetingRepository;
+        private readonly IMapper mapper;
+
+        public MeetingService(IMeetingRepository meetingRepository, IMapper mapper) {
+            this.meetingRepository = meetingRepository;
+            this.mapper = mapper;
         }
 
-        public Task DeleteMeeting(int meetingId) {
-            throw new NotImplementedException();
+        public async Task AddMeeting(CreateMeetingDto createMeetingDto) {
+            var value = mapper.Map<Meeting>(createMeetingDto);
+            await meetingRepository.AddAsync(value);
         }
 
-        public Task<Meeting> GetMeetingById(int meetingId) {
-            throw new NotImplementedException();
+        public async Task DeleteMeetingById(int meetingId) {
+            await meetingRepository.DeleteAsync(u => u.Id == meetingId);
         }
 
-        public Task<List<Meeting>> GetMeetingList() {
-            throw new NotImplementedException();
+        public async Task<ResultMeetingDto> GetByIdMeeting(int meetingId) {
+            var meeting = await meetingRepository.GetAsync(u => u.Id == meetingId);
+            return mapper.Map<ResultMeetingDto>(meeting);
         }
 
-        public Task UpdateMeeting(Meeting meeting) {
-            throw new NotImplementedException();
+        public async Task<List<Meeting>> GetMeetingList() { // TO DO : CHange return type to result meeting dto
+            return await meetingRepository.ListAsync(b => true);
+        }
+
+        public async Task UpdateMeeting(UpdateMeetingDto updateMeetingDto) {
+            var meeting = mapper.Map<Meeting>(updateMeetingDto);
+            await meetingRepository.UpdateAsync(meeting);
         }
     }
 }

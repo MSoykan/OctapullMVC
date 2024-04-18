@@ -10,7 +10,7 @@ namespace BusinessLayer.Abstract {
     public interface IUserService {
         Task AddUser(CreateUserDto createUserDto);
         Task UpdateUser(UpdateUserDto updateUserDto);
-        Task DeleteUser(int userId);
+        Task DeleteUserById(int userId);
         Task<ResultUserDto> GetByIdUserAsync(int userId);
         Task<List<User>> GetUserList();
     }
