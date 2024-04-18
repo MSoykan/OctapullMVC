@@ -1,6 +1,17 @@
+using AutoMapper;
+using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
+using BusinessLayer.Mapper;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IMeetingService, IMeetingService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

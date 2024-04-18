@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
@@ -21,17 +22,26 @@ namespace DataAccessLayer.Concrete.Repositories {
             _object = context.Set<T>();
         }
 
-        public async Task DeleteAsync(T p) {
-            _object.Remove(p);
-            await context.SaveChangesAsync();
+        //public async Task DeleteAsync(T p) {
+        //    _object.Remove(p);
+        //    await context.SaveChangesAsync();
+        //}
+
+        public async Task Delete(Expression<Func<T, bool>> filter) {
+                var deletedEntity = await context.Set<T>().SingleOrDefaultAsync(filter);
+                var entity = context.Entry(deletedEntity);
+                entity.State = EntityState.Deleted;
+                await context.SaveChangesAsync();
+            
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> filter) {
-            return await _object.SingleOrDefaultAsync(filter);
-        }
+            return await context.Set<T>().SingleOrDefaultAsync(filter);
+            }
 
         public async Task AddAsync(T entity) {
-            _object.Add(entity);
+            var addedEntity = context.Entry(entity);
+            addedEntity.State = EntityState.Added;
             await context.SaveChangesAsync();
         }
 
@@ -40,10 +50,21 @@ namespace DataAccessLayer.Concrete.Repositories {
         }
 
         public async Task<List<T>> ListAsync(Expression<Func<T, bool>> filter) {
-            return await _object.Where(filter).ToListAsync();
+            return filter == null
+                   ? await context.Set<T>().ToListAsync()
+                   : await context.Set<T>().Where(filter).ToListAsync();
         }
 
-        public async Task UpdateAsync(T p) {
+        public async Task UpdateAsync(T entity) {
+            var updatedEntity = context.Entry(entity);
+            updatedEntity.State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Expression<Func<T, bool>> filter) {
+            var deletedEntity = await context.Set<T>().SingleOrDefaultAsync(filter);
+            var entity = context.Entry(deletedEntity);
+            entity.State = EntityState.Deleted;
             await context.SaveChangesAsync();
         }
     }

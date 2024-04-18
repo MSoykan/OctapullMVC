@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Abstract {
     public interface IRepository<T> {
-        Task<List<T>> ListAsync();
-
-        Task AddAsync(T p);
-
+        //Task<List<T>> ListAsync();
+        Task AddAsync(T entity);
         Task<T> GetAsync (Expression<Func<T, bool>> filter);
+        //T Get(Expression<Func<T, bool>> filter);
 
-        Task DeleteAsync(T p);
+        Task DeleteAsync(Expression<Func<T, bool>> filter);
 
-        Task UpdateAsync(T p);
+        Task UpdateAsync(T entity);
 
         Task<List<T>> ListAsync(Expression<Func<T, bool>> filter);
     }
