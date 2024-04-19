@@ -5,8 +5,18 @@ using BusinessLayer.Mapper;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete.Repositories;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using OctapullMVC.Data;
+using EntityLayer.Concrete;
+using DataAccessLayer.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("OctapullMVCAuthDbContextConnection") ?? throw new InvalidOperationException("Connection string 'OctapullMVCAuthDbContextConnection' not found.");
+
+builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<Context>();
 
 // Add services to the container.
 // Inject repositories
@@ -21,6 +31,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+builder.Services.Configure<IdentityOptions>(options => {
+    options.Password.RequireUppercase = false;
+});
 
 var app = builder.Build();
 

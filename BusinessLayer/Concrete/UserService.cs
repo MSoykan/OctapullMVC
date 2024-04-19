@@ -25,11 +25,11 @@ namespace BusinessLayer.Concrete {
             await userRepository.AddAsync(value);
         }
 
-        public async Task DeleteUserById(int userId) {
+        public async Task DeleteUserById(string userId) {
             await userRepository.DeleteAsync(u => u.Id == userId);
         }
 
-        public async Task<ResultUserDto> GetByIdUserAsync(int userId) { 
+        public async Task<ResultUserDto> GetByIdUserAsync(string userId) { 
             var user = await userRepository.GetAsync(u => u.Id == userId);
             return mapper.Map<ResultUserDto>(user); 
         }

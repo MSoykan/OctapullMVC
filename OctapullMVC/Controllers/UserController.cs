@@ -21,7 +21,7 @@ namespace OctapullMVC.Controllers {
             return View();
         }
 
-        public async Task<IActionResult> Details(int id) {
+        public async Task<IActionResult> Details(string id) {
             var user = await userService.GetByIdUserAsync(id);
             if (user == null) {
                 return NotFound();
@@ -63,7 +63,7 @@ namespace OctapullMVC.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id) {
+        public async Task<IActionResult> Delete(string id) {
             await userService.DeleteUserById(id);
             return RedirectToAction(nameof(Index));
         }
