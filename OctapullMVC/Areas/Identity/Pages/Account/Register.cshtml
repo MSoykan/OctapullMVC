@@ -50,10 +50,8 @@
 		<label asp-for="Input.ConfirmPassword">Confirm Password</label>
 		<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
 	</div>
-
+	<label for="fileUpload">Upload Profile Picture:</label>
 	<input type="file" asp-for="Input.UploadedFile" class="form-control" aria-required="true" />
-	<!-- Optionally, you can add additional attributes for styling and accessibility -->
-	<!-- For example, you can add a placeholder attribute -->
 	@* <label asp-for="Input.UploadedFile">Upload File</label> *@
 	<span asp-validation-for="Input.UploadedFile" class="text-danger"></span>
 	<div class="form-floating mb-3">
