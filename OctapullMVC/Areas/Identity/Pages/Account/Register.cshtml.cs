@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using BusinessLayer.EmailService.Abstract;
+using BusinessLayer.EmailService.Dto;
 using EntityLayer.Concrete;
 using EntityLayer.Dtos.UserDtos;
 using Microsoft.AspNetCore.Authentication;
@@ -20,6 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 //using OctapullMVC.Areas.Identity.Data;
 
 namespace OctapullMVC.Areas.Identity.Pages.Account
@@ -32,13 +35,19 @@ namespace OctapullMVC.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _config;
+
 
         public RegisterModel(
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IEmailService emailService,
+            IConfiguration config
+            )
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,6 +55,8 @@ namespace OctapullMVC.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _emailService = emailService;
+            _config = config;
         }
 
         /// <summary>
@@ -155,6 +166,12 @@ namespace OctapullMVC.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    EmailDto emailDto = new EmailDto {
+                        To = _config.GetSection("MockEmailUsername").Value,
+                        Subject = "Registration Notification",
+                        Body = "<i> You have registered to OctapullMVC website. Welcome aboard! </i>"
+                    };
+                    _emailService.SendEmail(emailDto);
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

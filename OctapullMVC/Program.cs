@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using OctapullMVC.Data;
 using EntityLayer.Concrete;
 using DataAccessLayer.Concrete;
+using BusinessLayer.EmailService.Abstract;
+using BusinessLayer.EmailService.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("OctapullMVCAuthDbContextConnection") ?? throw new InvalidOperationException("Connection string 'OctapullMVCAuthDbContextConnection' not found.");
@@ -27,6 +29,7 @@ builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IMeetingService, MeetingService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

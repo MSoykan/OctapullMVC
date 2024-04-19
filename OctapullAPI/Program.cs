@@ -1,5 +1,7 @@
 using BusinessLayer.Abstract;
 using BusinessLayer.Concrete;
+using BusinessLayer.EmailService.Abstract;
+using BusinessLayer.EmailService.Concrete;
 using DataAccessLayer.Abstract;
 using DataAccessLayer.Concrete.Repositories;
 using System.Reflection;
@@ -14,6 +16,7 @@ builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IMeetingService, MeetingService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 // Add services to the container.
