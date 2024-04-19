@@ -19,12 +19,12 @@ namespace OctapullAPI.Controllers {
             return Ok(values);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id) {
+        public async Task<IActionResult> GetUserById(string id) {
             var values = await userService.GetByIdUserAsync(id);
             return Ok(values);
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteUserById(int id) {
+        public async Task<IActionResult> DeleteUserById(string id) {
             await userService.DeleteUserById(id);
             return Ok("User with id " +id + " has been deleted succesfully" );
         }

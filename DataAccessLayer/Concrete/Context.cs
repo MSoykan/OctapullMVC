@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
@@ -11,7 +12,7 @@ using Document = EntityLayer.Concrete.Document;
 
 namespace DataAccessLayer.Concrete
 {
-    public class Context : DbContext
+    public class Context : IdentityDbContext
     {
         public Context() { }
 
@@ -19,12 +20,23 @@ namespace DataAccessLayer.Concrete
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder )
         {
             optionsBuilder.UseSqlServer("Server=DESKTOP-27F5QUI\\SQLEXPRESS;" + // server to connect to
-                "initial Catalog=OctapullMVC;" + // database to connect to
+                "initial Catalog=OctapullMVCIdentityTest;" + // database to connect to
                 "integrated Security=true;Trusted_Connection=True;TrustServerCertificate=True"); // . true indicates that Windows authentication (integrated security) is used.
         }
+        //public OctapullMVCAuthDbContext(DbContextOptions<OctapullMVCAuthDbContext> options)
+        //: base(options) {
+        //    options.use
+        //}
+
+        //protected override void OnModelCreating(ModelBuilder builder) {
+        //    base.OnModelCreating(builder);
+        //    // Customize the ASP.NET Identity model and override the defaults if needed.
+        //    // For example, you can rename the ASP.NET Identity table names and more.
+        //    // Add your customizations after calling base.OnModelCreating(builder);
+        //}
 
 
 
@@ -34,6 +46,10 @@ namespace DataAccessLayer.Concrete
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
+            // Customize the ASP.NET Identity model and override the defaults if needed.
+            // For example, you can rename the ASP.NET Identity table names and more.
+            // Add your customizations after calling base.OnModelCreating(builder);
 
             var converter = new ValueConverter<int[], string>(
                 v => string.Join(",", v),
